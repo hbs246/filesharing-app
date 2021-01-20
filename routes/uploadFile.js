@@ -46,16 +46,22 @@ router.post("/", (req, res) => {
 
         // Storage in database
 
-        const file = new File({
-            filename: req.file.filename,
-            uuid: uuid4(),
-            path: req.file.path,
-            size: req.file.size
-        });
-
-        const response = await file.save();
-        return res.json({ file: `${process.env.APP_BASE_URL}/files/${response.uuid}` });
-        // return res.render("download");
+        try {
+        
+            const file = new File({
+                filename: req.file.filename,
+                uuid: uuid4(),
+                path: req.file.path,
+                size: req.file.size
+            });
+    
+            const response = await file.save();
+            return res.json({ file: `${process.env.APP_BASE_URL}/files/${response.uuid}` });
+    
+        } catch (error) {
+            return res.send(error);            
+        }
+                // return res.render("download");
     });
 
     // Store into Database
@@ -111,3 +117,4 @@ router.post("/send", async(req,res)=>{
     }
 })
 module.exports = router;
+
